@@ -1,11 +1,12 @@
 bmcgehee/jdoe-logger:
+
   PreBuild:
-    - # Check to see if aws cli is installed
+    # Check to see if aws cli is installed
     - if which aws >/dev/null; then
     -   echo "--AWS CLI exists--"
     - else
     -   echo "--Installing AWS CLI--"
-    - # Check to see if unzip is installed
+    # Check to see if unzip is installed
     -   if which unzip >/dev/null; then
     -     echo "--Unzip exists--"
     -   else
@@ -16,8 +17,10 @@ bmcgehee/jdoe-logger:
     -   unzip awscli-bundle.zip
     -   sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
     - fi
+    
   Build:
     - echo "Nothing to build"
+    
   AfterBuildSuccess:
     - DISTELLI_USERNAME="bmcgehee"
     - BUILD_URL="https://www.distelli.com/$DISTELLI_USERNAME/builds/$DISTELLI_BUILDNUM"
@@ -28,6 +31,7 @@ bmcgehee/jdoe-logger:
     - aws s3 cp s3://jdoe-web/stuff.html stuff.html
     - sed -i "1s|^|$LOG_STRING|" stuff.html
     - aws s3 cp stuff.html s3://jdoe-web/stuff.html --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+    
   AfterBuildFailure:
     - DISTELLI_USERNAME="bmcgehee"
     - BUILD_URL="https://www.distelli.com/$DISTELLI_USERNAME/builds/$DISTELLI_BUILDNUM"
@@ -38,6 +42,7 @@ bmcgehee/jdoe-logger:
     - aws s3 cp s3://jdoe-web/stuff.html stuff.html
     - sed -i "1s|^|$LOG_STRING|" stuff.html
     - aws s3 cp stuff.html s3://jdoe-web/stuff.html --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers  
+    
   ReleaseNotesCmd:
     - DISTELLI_USERNAME="jdoe"
     - BUILD_URL="https://www.distelli.com/$DISTELLI_USERNAME/builds/$DISTELLI_BUILDNUM"
