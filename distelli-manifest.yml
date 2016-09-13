@@ -1,0 +1,48 @@
+bmcgehee/jdoe-logger:
+  PreBuild:
+    - # Check to see if aws cli is installed
+    - if which aws >/dev/null; then
+    -   echo "--AWS CLI exists--"
+    - else
+    -   echo "--Installing AWS CLI--"
+    - # Check to see if unzip is installed
+    -   if which unzip >/dev/null; then
+    -     echo "--Unzip exists--"
+    -   else
+    -     echo "--Installing unzip--"
+    -     sudo apt-get -y install unzip
+    -   fi
+    -   curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+    -   unzip awscli-bundle.zip
+    -   sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+    - fi
+  Build:
+    - echo "Nothing to build"
+  AfterBuildSuccess:
+    - DISTELLI_USERNAME="bmcgehee"
+    - BUILD_URL="https://www.distelli.com/$DISTELLI_USERNAME/builds/$DISTELLI_BUILDNUM"
+    - LOG_DATE="$(date +"%Y/%m/%d %H:%M:%S")"
+    - LOG_STATUS="Build Succeeded. Build ID $AHP_JOB_ID"
+    - LOG_STRING="$LOG_DATE $LOG_STATUS <a href=\"$BUILD_URL\" target=\"_blank\">Build# $DISTELLI_BUILDNUM</a><br>\n"
+    - echo "$LOG_STRING"
+    - aws s3 cp s3://jdoe-web/stuff.html stuff.html
+    - sed -i "1s|^|$LOG_STRING|" stuff.html
+    - aws s3 cp stuff.html s3://jdoe-web/stuff.html --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+  AfterBuildFailure:
+    - DISTELLI_USERNAME="bmcgehee"
+    - BUILD_URL="https://www.distelli.com/$DISTELLI_USERNAME/builds/$DISTELLI_BUILDNUM"
+    - LOG_DATE="$(date +"%Y/%m/%d %H:%M:%S")"
+    - LOG_STATUS="Build <b><font color=\"red\">Failed</font></b>. Build ID $AHP_JOB_ID"
+    - LOG_STRING="$LOG_DATE $LOG_STATUS <a href=\"$BUILD_URL\" target=\"_blank\">Build# $DISTELLI_BUILDNUM</a><br>\n"
+    - echo "$LOG_STRING"
+    - aws s3 cp s3://jdoe-web/stuff.html stuff.html
+    - sed -i "1s|^|$LOG_STRING|" stuff.html
+    - aws s3 cp stuff.html s3://jdoe-web/stuff.html --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers  
+  ReleaseNotesCmd:
+    - DISTELLI_USERNAME="jdoe"
+    - BUILD_URL="https://www.distelli.com/$DISTELLI_USERNAME/builds/$DISTELLI_BUILDNUM"
+    - LOG_DATE=$(date +"%Y/%m/%d %H:%M:%S")
+    - LOG_STATUS="Custom Build ID $AHP_JOB_ID"
+    - LOG_STRING="$LOG_DATE $LOG_STATUS Build# $DISTELLI_BUILDNUM $BUILD_URL"
+    - echo -e "$LOG_STRING\n"
+
