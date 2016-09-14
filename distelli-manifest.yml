@@ -26,7 +26,7 @@ bmcgehee/jdoe-logger:
     - BUILD_URL="https://www.distelli.com/$DISTELLI_USERNAME/builds/$DISTELLI_BUILDNUM"
     - S3_BUCKET="s3://jdoe-web"
     - S3_URL="http://jdoe-web.s3-website-us-west-2.amazonaws.com"
-    - UNIQUE_FILENAME="distelli-build$DISTELLI_BUILDNUM.html"
+    - UNIQUE_FILENAME="distelli-build$DISTELLI_BUILDNUM.txt"
     - UNIQUE_BUCKET="$S3_BUCKET/$UNIQUE_FILENAME"
     - UNIQUE_URL="$S3_URL/$UNIQUE_FILENAME"
     - LOG_DATE="$(date +"%Y/%m/%d %H:%M:%S")"
