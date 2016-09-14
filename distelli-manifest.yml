@@ -20,7 +20,6 @@ bmcgehee/jdoe-logger:
     
   Build:
     - echo "Nothing to build"
-    - fail please
     
   AfterBuildSuccess:
     - DISTELLI_USERNAME="bmcgehee"
