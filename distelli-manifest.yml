@@ -35,7 +35,7 @@ bmcgehee/jdoe-logger:
     - cat test_results.exa >> "$UNIQUE_FILENAME"
     - NEW_LINK="http://jdoe-web.s3-website-us-west-2.amazonaws.com/$UNIQUE_FILENAME"
     - aws s3 cp "$UNIQUE_FILENAME" "$UNIQUE_URL" --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
-    - aws s3 cp "$S3_BUCKET/stuff.html stuff.html"
+    - aws s3 cp "$S3_BUCKET/stuff.html" stuff.html
     - sed -i "1s|^|$LOG_STRING|" stuff.html
     - aws s3 cp stuff.html "S3_BUCKET/stuff.html" --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
     
