@@ -43,13 +43,21 @@ bmcgehee/jdoe-logger:
   AfterBuildFailure:
     - DISTELLI_USERNAME="bmcgehee"
     - BUILD_URL="https://www.distelli.com/$DISTELLI_USERNAME/builds/$DISTELLI_BUILDNUM"
+    - S3_BUCKET="s3://jdoe-web"
+    - S3_URL="http://jdoe-web.s3-website-us-west-2.amazonaws.com"
+    - UNIQUE_FILENAME="distelli-build$DISTELLI_BUILDNUM.txt"
+    - UNIQUE_BUCKET="$S3_BUCKET/$UNIQUE_FILENAME"
+    - UNIQUE_URL="$S3_URL/$UNIQUE_FILENAME"
     - LOG_DATE="$(date +"%Y/%m/%d %H:%M:%S")"
     - LOG_STATUS="Build <b><font color=\"red\">Failed</font></b>. Build ID $AHP_JOB_ID"
-    - LOG_STRING="$LOG_DATE $LOG_STATUS <a href=\"$BUILD_URL\" target=\"_blank\">Build# $DISTELLI_BUILDNUM</a><br>\n"
-    - echo "$LOG_STRING"
-    - aws s3 cp s3://jdoe-web/stuff.html stuff.html
+    - LOG_STRING="$LOG_DATE $LOG_STATUS <a href=\"$BUILD_URL\" target=\"_blank\">Build# $DISTELLI_BUILDNUM</a> <a href=\"$UNIQUE_URL\" target=\"_blank\">Test Results</a><br>"
+    - echo "$LOG_STRING" > "$UNIQUE_FILENAME"
+    - cat test_results.exa >> "$UNIQUE_FILENAME"
+    - NEW_LINK="http://jdoe-web.s3-website-us-west-2.amazonaws.com/$UNIQUE_FILENAME"
+    - aws s3 cp "$UNIQUE_FILENAME" "$UNIQUE_BUCKET" --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+    - aws s3 cp "$S3_BUCKET/stuff.html" stuff.html
     - sed -i "1s|^|$LOG_STRING|" stuff.html
-    - aws s3 cp stuff.html s3://jdoe-web/stuff.html --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers  
+    - aws s3 cp stuff.html "$S3_BUCKET/stuff.html" --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
     
   ReleaseNotesCmd:
     - DISTELLI_USERNAME="jdoe"
