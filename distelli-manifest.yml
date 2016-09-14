@@ -31,7 +31,7 @@ bmcgehee/jdoe-logger:
     - UNIQUE_URL="$S3_URL/$UNIQUE_FILENAME"
     - LOG_DATE="$(date +"%Y/%m/%d %H:%M:%S")"
     - LOG_STATUS="Build Succeeded."
-    - LOG_STRING="$LOG_DATE $LOG_STATUS <a href=\"$BUILD_URL\" target=\"_blank\">Build# $DISTELLI_BUILDNUM</a> <a href=\"$UNIQUE_URL\">Test Results</a><br>"
+    - LOG_STRING="$LOG_DATE $LOG_STATUS <a href=\"$BUILD_URL\" target=\"_blank\">Build# $DISTELLI_BUILDNUM</a> <a href=\"$UNIQUE_URL\" target=\"_blank\">Test Results</a><br>"
     - echo "$LOG_STRING" > "$UNIQUE_FILENAME"
     - cat test_results.exa >> "$UNIQUE_FILENAME"
     - NEW_LINK="http://jdoe-web.s3-website-us-west-2.amazonaws.com/$UNIQUE_FILENAME"
